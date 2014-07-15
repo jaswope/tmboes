@@ -1,0 +1,46 @@
+{
+  "manifest_version": 2,
+  "name": "TMBO Enhancement Suite",
+  "short_name": "TMBO:ES",
+  "version": "1.8.3",
+  "description": "Utilities to enhance the TMBO browsing experience.",
+  "author": "Jon Swope",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "web_accessible_resources": [
+    "styles/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://thismight.be/offensive/*",
+        "https://sandbox.thismight.be/offensive/*"
+      ],
+      "run_at": "document_start",
+      "js": ["content_scripts/tmboes.js"]
+    },
+    {
+      "matches": [
+        "https://thismight.be/offensive/pages/pic.php*",
+        "https://sandbox.thismight.be/offensive/pages/pic.php*"
+      ],
+      "run_at": "document_start",
+      "js": ["content_scripts/pic_extensions.js"],
+      "css": ["styles/pic.css"]
+    }
+  ],
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "storage",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "icons": {
+    "16": "icons/pluslogo-16.png",
+    "48": "icons/pluslogo-48.png",
+    "128": "icons/pluslogo-128.png"
+  }
+}

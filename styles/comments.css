@@ -1,0 +1,47 @@
+#tmboes-info {
+    position: fixed;
+    background: #ccf;
+    color: black;
+    border: 1px solid #003;
+    pointer-events: none;
+    padding: 5px;
+}
+
+#tmboes-info.hidden {
+    display: none;
+}
+
+#tmboes-info img {
+    margin-bottom: 5px;
+}
+
+#commentList > div.tmboes-new {
+    border-left: 2px solid rgba(34,34,85,1);
+}
+
+#commentList > div {
+    border-left: 2px solid rgba(34,34,85,0);
+    padding-left: 8px;
+    transition: border 250ms ease-out;
+}
+
+.tmboes-summarize .entry:not(.comment) {
+    display: none;
+}
+
+#tmboes-summaries {
+    display: none;
+}
+
+.tmboes-summarize #tmboes-summaries {
+    display: block;
+}
+
+#tmboes-summarizeToggle {
+    display: inline-block;
+    float: right;
+}
+
+#tmboes-summarizeToggle.tmboes-disabled {
+    color: #aae;
+}

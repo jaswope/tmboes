@@ -1,0 +1,16 @@
+.tmboes-nightmode body {
+    color: hsl(0, 0%, 75%);
+    background: hsl(0, 0%, 15%);
+}
+
+.tmboes-nightmode a {
+    color: hsl(240, 25%, 75%);
+}
+
+.tmboes-nightmode a:visited {
+    color: hsl(0, 25%, 75%);
+}
+
+.tmboes-nightmode a:active {
+    color: hsl(300, 25%, 75%);
+}
