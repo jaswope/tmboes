@@ -26,7 +26,7 @@
 }
 
 .tmboes-summarize .entry:not(.comment) {
-    display: none;
+    display: none !important;
 }
 
 #tmboes-summaries {
