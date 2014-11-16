@@ -1,0 +1,18 @@
+{{#isImage}}
+    <img src="{{src}}">
+{{/isImage}}
+<div class="popup-content">
+  <div class="popup-filename heading">
+      {{type}}: {{filename}}
+  </div>
+  {{#comment}}
+      <div class="entry comment">
+          <span class="comment_body">{{& comment}}</span>
+          <br>
+          <div class="timestamp">{{timestamp}}</div>
+
+          » <span class="userLink">{{username}}</span>
+      </div>
+  {{/comment}}
+</div>
+<div style="clear: both;"></div>

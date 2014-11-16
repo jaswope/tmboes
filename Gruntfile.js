@@ -16,10 +16,19 @@ module.exports = function(grunt) {
             dest: 'build/background.js'
           }
         ]
+      },
+      templates: {
+        files: [
+          {
+            src: ['content_scripts/tmboes.js', 'templates/template.js', 'build/templates.js'],
+            dest: 'build/content_scripts/tmboes.js'
+          }
+        ]
       }
     },
     clean: {
-      build: ["build/"]
+      build: ["build/"],
+      templates: ["build/templates.js"]
     },
     copy: {
       build: {
@@ -45,6 +54,20 @@ module.exports = function(grunt) {
           }
         ]
       }
+    },
+    hogan: {
+      templates: {
+        options: {
+          namespace: "tmboes.templates",
+          defaultName: function(filename) {
+            return filename.match(/([^/]+)\.mustache/)[1];
+          },
+          templateOptions: { asString: true, disableLambda: true }
+          },
+        files: {
+          "build/templates.js": ["templates/*.mustache"]
+        }
+      }
     }
   });
 
@@ -53,8 +76,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-compress');
+  grunt.loadNpmTasks('grunt-templates-hogan');
 
   // Default task(s).
-  grunt.registerTask('default', ['clean:build', 'uglify:build', 'copy:build', 'compress:build']);
-
+  grunt.registerTask('default', ['clean:build', 'uglify:build', 'templates', 'copy:build', 'compress:build']);
+  grunt.registerTask('templates', ['hogan:templates', 'uglify:templates', 'clean:templates'])
 };

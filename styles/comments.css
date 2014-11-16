@@ -2,9 +2,17 @@
     position: fixed;
     background: #ccf;
     color: black;
-    border: 1px solid #003;
     pointer-events: none;
-    padding: 5px;
+    padding: 0px;
+    box-shadow: 0 5px 11px rgba(0,0,0,0.25);
+}
+
+#tmboes-info .popup-filename {
+    min-width: 270px;
+}
+
+#tmboes-info .popup-content {
+    float: right;
 }
 
 #tmboes-info.hidden {
@@ -12,7 +20,18 @@
 }
 
 #tmboes-info img {
-    margin-bottom: 5px;
+    float: left;
+}
+
+#tmboes-info .entry {
+    width: 540px;
+    text-align: left;
+    background: #bbe;
+}
+
+#tmboes-info .userLink {
+    color: #666699;
+    text-decoration: underline;
 }
 
 #commentList > div.tmboes-new {

@@ -10,6 +10,7 @@ if (!window['tmboes']) {
     };
 
     var postInfos = {};
+    var commentInfos = {};
 
     var tmboes = {
       convertToDynamicUpload: function (blob, filename) {
@@ -186,10 +187,43 @@ if (!window['tmboes']) {
           xhr.send();
         }
       },
+      getCommentInfo: function(id, callback) {
+        if (commentInfos[id]) {
+          callback(commentInfos[id]);
+        } else {
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', 'https://thismight.be/offensive/api.php/getcomments.json?votefilter=c&id=' + id);
+          xhr.addEventListener("loadend", function () {
+            var comments = JSON.parse(xhr.responseText);
+            if (comments.length > 0) {
+              commentInfos[id] = comments[0];
+              commentInfos[id].comment = tmboes.htmlComment(commentInfos[id].comment);
+            }
+            callback(commentInfos[id]);
+          });
+          xhr.send();
+        }
+      },
+      htmlComment: function(commentText) {
+        function escapeHtml(str) {
+          var div = document.createElement('div');
+          div.appendChild(document.createTextNode(str));
+          return div.innerHTML;
+        }
+
+        commentText = escapeHtml(commentText);
+
+        commentText = commentText.replace(/(http[s]?:\/\/[^\s<>]+)/gi, "<a href=\"$1\" rel=\"nofollow\">$1</a>");
+
+        commentText = commentText.replace(/\n/g, "<br />");
+
+        return commentText;
+      },
       enableLinkPreviews: function() {
         document.addEventListener('DOMContentLoaded', function() {
           var infopattern = /^https:\/\/(sandbox\.)?thismight\.be\/.*(c=comments|pic\.php).*/;
           var idpattern = /id=(\d+)/;
+          var commentpattern = /#(\d+)$/;
 
 
           var infoDiv = document.createElement("div");
@@ -225,27 +259,39 @@ if (!window['tmboes']) {
             if (e.target.tagName == "A" && infopattern.test(e.target.getAttribute('href'))) {
               e.stopPropagation();
               var id = idpattern.exec(e.target.getAttribute('href'))[1];
+              var commentMatch = commentpattern.exec(e.target.getAttribute('href'));
 
               var finished = false;
               infoDiv.innerHTML = "Loading...";
               infoDiv.classList.toggle("hidden", false);
+
               tmboes.getPostInfo(id, function (post) {
-                if (!finished) {
-                  infoDiv.innerHTML = "";
-                  var filename = document.createElement("div");
-                  filename.innerText = post.type + ": " + post.filename;
-
-
-                  if (post.type == "image") {
-                    var img = document.createElement('img');
-                    img.addEventListener('load', positionInfoDiv);
-                    img.src = post.tmbo || post.nsfw ? '/offensive/graphics/th-filtered.gif' : post.link_thumb;
-                    infoDiv.appendChild(img);
-                  }
-                  infoDiv.appendChild(filename);
-                  positionInfoDiv();
+                if (commentMatch) {
+                  tmboes.getCommentInfo(commentMatch[1], function(comment) {
+                    renderPreview(post, comment);
+                  });
+                } else {
+                  renderPreview(post, null);
                 }
               });
+
+              function renderPreview(post, comment) {
+                if (!finished) {
+                  infoDiv.innerHTML = tmboes.templates.link_preview.render({
+                    filename: post.filename,
+                    type: post.type,
+                    isImage: post.type == "image",
+                    src: post.tmbo || post.nsfw ? '/offensive/graphics/th-filtered.gif' : post.link_thumb,
+                    comment: comment
+                  });
+
+                  if (post.type == "image") {
+                    var img = infoDiv.querySelector("img");
+                    img.addEventListener('load', positionInfoDiv);
+                  }
+                  positionInfoDiv();
+                }
+              }
 
               singleCallback(e.target, 'mouseout', function (e) {
                 finished = true;
