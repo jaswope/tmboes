@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "TMBO Enhancement Suite",
   "short_name": "TMBO:ES",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "description": "Utilities to enhance the TMBO browsing experience.",
   "author": "Jon Swope",
   "background": {
